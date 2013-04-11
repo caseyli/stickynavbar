@@ -1,0 +1,4 @@
+== STICKY NAV BAR
+
+This is a work in progress to build a library to create easy sticky nav bars.
+
