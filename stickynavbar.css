@@ -1,17 +1,3 @@
-/* THESE PROPERTIES CAN BE ERASE ***/
-
-body {
-	margin:0px;
-}
-
-.section {
-	height:500px;
-	border-top:1px solid #eee;
-	border-bottom:1px solid #ddd;
-}
-
-/* END WHAT CAN BE ERASED ***/
-
 /* NAVIGATION BAR */
 html {
 	height:100%;
@@ -58,8 +44,4 @@ html {
 .nav-links a.nav-selected {
 	color:black;
 	border-bottom:2px solid #222;
-}
-
-.clear {
-	clear:both;
 }

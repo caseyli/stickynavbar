@@ -1,0 +1,22 @@
+body {
+	margin:0px;
+}
+
+.clear {
+	clear:both;
+}
+
+.section {
+	border-bottom:1px solid #ddd;
+}
+
+.section0-section {
+	height:500px;
+	font-size:40px;
+}
+
+.container {
+	width:960px;
+	margin:0 auto;
+	font-size:30px;
+}
