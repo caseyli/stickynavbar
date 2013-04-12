@@ -1,3 +1,5 @@
+var SCROLL_TOLERANCE = 1;
+
 $(function(){
 	$(window).scroll(windowScroll);
 	$(".nav-link").click(function(){ 
@@ -6,51 +8,53 @@ $(function(){
 	});
 });
 
-function navigateTo(destination) {
-	var navBarHeight = 0;
-	if($(".navigation-bar")) {
-		navBarHeight = $(".navigation-bar").height();
-	}
-	$('html,body').animate({scrollTop: $(destination).offset().top - navBarHeight},'slow');
-}
-
-/*
- * Fix navigation bar to top
- */
 function windowScroll() {
-	var scrollTolerance = 1;
 	var pixelsDown = $(window).scrollTop();
-	
-	/* Calculate Nav Bar Height */
-	var navBarHeight = 0;
-	if($(".navigation-bar")) {
-		navBarHeight = $(".navigation-bar").height();
-	}
-	
-	/* Navigation Bar */
-	if(pixelsDown > $(".section0-section").height() - scrollTolerance) {
-		$(".navigation-bar").addClass("navigation-bar-fixed");
-		$(".main").css("padding-top", navBarHeight + "px");
-	}
-	else {
-		$(".navigation-bar").removeClass("navigation-bar-fixed");
-		$(".main").css("padding-top", "0px");
-	}
-	
-	/* Highlighted Nav */
-	if($(window).scrollTop() + $(window).height() == $(document).height()) { highlightNavLink("#section4-link"); }
-	else if (pixelsDown > $(".section4-section").offset().top - navBarHeight - scrollTolerance) { highlightNavLink("#section4-link"); }
-	else if (pixelsDown > $(".section3-section").offset().top - navBarHeight - scrollTolerance) { highlightNavLink("#section3-link"); }
-	else if (pixelsDown > $(".section2-section").offset().top - navBarHeight - scrollTolerance) { highlightNavLink("#section2-link"); }
-	else if(pixelsDown > $(".section1-section").offset().top - navBarHeight - scrollTolerance) { highlightNavLink("#section1-link"); }
-	else { highlightNavLink("#"); }
+		
+	checkForFixNavBar();
+	checkForHighlightNavLink();
 	
 	// DEBUG CODE
 	// $("#scroll").html($(window).scrollTop() + " / " + $(window).height() + " / " + $(document).height());
 }
 
+function navigateTo(destination) {
+	$('html,body').animate({scrollTop: $(destination).offset().top - navBarHeight()},'slow');
+}
+
+
+
+function checkForFixNavBar() {
+	/* Navigation Bar */
+	if($(window).scrollTop() > $(".section0-section").height() - SCROLL_TOLERANCE) {
+		$(".navigation-bar").addClass("navigation-bar-fixed");
+		$(".main").css("padding-top", navBarHeight() + "px");
+	}
+	else {
+		$(".navigation-bar").removeClass("navigation-bar-fixed");
+		$(".main").css("padding-top", "0px");
+	}	
+}
+
+function checkForHighlightNavLink() {
+	if($(window).scrollTop() + $(window).height() == $(document).height()) { highlightNavLink("#section4-link"); }
+	else if ($(window).scrollTop() > $(".section4-section").offset().top - navBarHeight() - SCROLL_TOLERANCE) { highlightNavLink("#section4-link"); }
+	else if ($(window).scrollTop() > $(".section3-section").offset().top - navBarHeight() - SCROLL_TOLERANCE) { highlightNavLink("#section3-link"); }
+	else if ($(window).scrollTop() > $(".section2-section").offset().top - navBarHeight() - SCROLL_TOLERANCE) { highlightNavLink("#section2-link"); }
+	else if($(window).scrollTop() > $(".section1-section").offset().top - navBarHeight() - SCROLL_TOLERANCE) { highlightNavLink("#section1-link"); }
+	else { highlightNavLink("#"); }
+}
+
 function highlightNavLink(id) {
 	$(".nav-links a").removeClass("nav-selected");
 	$(id).addClass("nav-selected");
+}
+
+function navBarHeight() {
+	var navBarHeight = 0;
+	if($(".navigation-bar")) {
+		navBarHeight = $(".navigation-bar").height();
+	}
+	return navBarHeight;
 }
 
