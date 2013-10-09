@@ -1,8 +1,26 @@
 var SCROLL_TOLERANCE = 1;
+var section0;
+var navigationBar;
+var fixedNavigationBarClass;
+var navLink;
+var highlightNavLinkClass;
+var highlightTolerance;
+
+function initialize() {
+  SCROLL_TOLERANCE = 1;
+  section0 = $(".hero-section");
+  navigationBar = $(".navigation-bar");
+  navLink = $(".nav-link");
+  fixedNavigationBarClass = "navigation-bar-fixed";
+  highlightNavLinkClass = "nav-link-highlighted";
+  hightlightTolerance = 20;
+}
 
 $(function(){
+  initialize();
+  
 	$(window).scroll(windowScroll);
-	$(".nav-link").click(function(){ 
+	navLink.click(function(){ 
 		navigateTo($(this).attr("destination"));
 		return false;
 	});
@@ -10,39 +28,44 @@ $(function(){
 
 function windowScroll() {
 	var pixelsDown = $(window).scrollTop();
-		
 	checkForFixNavBar();
-	checkForHighlightNavLink();
-	
-	// DEBUG CODE
-	// $("#scroll").html($(window).scrollTop() + " / " + $(window).height() + " / " + $(document).height());
+	checkForHighlightNavLink(pixelsDown);
 }
 
 function navigateTo(destination) {
 	$('html,body').animate({scrollTop: $(destination).offset().top - navBarHeight()},'slow');
 }
 
-
-
 function checkForFixNavBar() {
-	/* Navigation Bar */
-	if($(window).scrollTop() > $(".section0-section").height() - SCROLL_TOLERANCE) {
-		$(".navigation-bar").addClass("navigation-bar-fixed");
-		$(".main").css("padding-top", navBarHeight() + "px");
+
+	var totalSection0Height = section0.height() + 
+	                          parseInt(section0.css("padding-top").replace("px", "")) +
+	                          parseInt(section0.css("padding-bottom").replace("px", ""));
+	if($(window).scrollTop() > totalSection0Height - SCROLL_TOLERANCE) {
+		navigationBar.addClass(fixedNavigationBarClass);
+		$("body").css("padding-top", navBarHeight() + "px");
 	}
 	else {
-		$(".navigation-bar").removeClass("navigation-bar-fixed");
-		$(".main").css("padding-top", "0px");
+		navigationBar.removeClass(fixedNavigationBarClass);
+		$("body").css("padding-top", "0px");
 	}	
 }
 
-function checkForHighlightNavLink() {
-	if($(window).scrollTop() + $(window).height() == $(document).height()) { highlightNavLink("#section4-link"); }
-	else if ($(window).scrollTop() > $(".section4-section").offset().top - navBarHeight() - SCROLL_TOLERANCE) { highlightNavLink("#section4-link"); }
-	else if ($(window).scrollTop() > $(".section3-section").offset().top - navBarHeight() - SCROLL_TOLERANCE) { highlightNavLink("#section3-link"); }
-	else if ($(window).scrollTop() > $(".section2-section").offset().top - navBarHeight() - SCROLL_TOLERANCE) { highlightNavLink("#section2-link"); }
-	else if($(window).scrollTop() > $(".section1-section").offset().top - navBarHeight() - SCROLL_TOLERANCE) { highlightNavLink("#section1-link"); }
-	else { highlightNavLink("#"); }
+function checkForHighlightNavLink(pixelsDown) {
+  var highlightElement;
+  if(pixelsDown + $(window).height() == $(document).height()) {
+    highlightElement = $(navLink[navLink.length-1]);
+  }
+  else {
+    jQuery.each(navLink, function(){
+      var distanceFromTop = $($(this).attr("destination")).offset().top - pixelsDown - hightlightTolerance;
+      if(distanceFromTop < navBarHeight()) {
+        highlightElement = $(this);
+      }
+    });    
+  }
+  navLink.removeClass(highlightNavLinkClass);
+  highlightElement.addClass(highlightNavLinkClass);
 }
 
 function highlightNavLink(id) {
@@ -52,9 +75,8 @@ function highlightNavLink(id) {
 
 function navBarHeight() {
 	var navBarHeight = 0;
-	if($(".navigation-bar")) {
-		navBarHeight = $(".navigation-bar").height();
+	if(navigationBar) {
+		navBarHeight = navigationBar.height();
 	}
 	return navBarHeight;
 }
-
