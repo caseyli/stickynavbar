@@ -5,12 +5,15 @@ var fixedNavigationBarClass;
 var navLink;
 var highlightNavLinkClass;
 var highlightTolerance;
+var signedInBarHeight = 0;
+var mainContainer = 0;
 
 function initialize() {
   SCROLL_TOLERANCE = 1;
   section0 = $(".hero-section");
   navigationBar = $(".navigation-bar");
   navLink = $(".nav-link");
+  mainContainer = $(".main");
   fixedNavigationBarClass = "navigation-bar-fixed";
   highlightNavLinkClass = "nav-link-highlighted";
   hightlightTolerance = 20;
@@ -41,13 +44,20 @@ function checkForFixNavBar() {
 	var totalSection0Height = section0.height() + 
 	                          parseInt(section0.css("padding-top").replace("px", "")) +
 	                          parseInt(section0.css("padding-bottom").replace("px", ""));
+
+
+	if($(".signed-in-body").length) {
+		signedInBarHeight = $(".signed-in-bar").height() + parseInt($(".signed-in-bar").css("padding-top")) + parseInt($(".signed-in-bar").css("padding-top"));
+	}
+
 	if($(window).scrollTop() > totalSection0Height - SCROLL_TOLERANCE) {
 		navigationBar.addClass(fixedNavigationBarClass);
-		$("body").css("padding-top", navBarHeight() + "px");
+		navigationBar.css("top", signedInBarHeight + "px");
+		mainContainer.css("padding-top", navBarHeight() + "px");
 	}
 	else {
 		navigationBar.removeClass(fixedNavigationBarClass);
-		$("body").css("padding-top", "0px");
+		mainContainer.css("padding-top", "0px");
 	}	
 }
 
@@ -65,7 +75,9 @@ function checkForHighlightNavLink(pixelsDown) {
     });    
   }
   navLink.removeClass(highlightNavLinkClass);
-  highlightElement.addClass(highlightNavLinkClass);
+  if(typeof highlightElement != "undefined") {
+  	highlightElement.addClass(highlightNavLinkClass);	
+  }
 }
 
 function highlightNavLink(id) {
@@ -76,7 +88,9 @@ function highlightNavLink(id) {
 function navBarHeight() {
 	var navBarHeight = 0;
 	if(navigationBar) {
-		navBarHeight = navigationBar.height();
+		navBarHeight = navigationBar.height()+ 
+	                      parseInt(navigationBar.css("padding-top").replace("px", "")) +
+	                      parseInt(navigationBar.css("padding-bottom").replace("px", ""));
 	}
 	return navBarHeight;
 }
