@@ -8,7 +8,7 @@ var highlightTolerance;
 var signedInBarHeight = 0;
 var mainContainer = 0;
 
-function initialize() {
+function initializeStickyNavBar() {
   SCROLL_TOLERANCE = 1;
   section0 = $(".hero-section");
   navigationBar = $(".navigation-bar");
@@ -20,7 +20,7 @@ function initialize() {
 }
 
 $(function(){
-  initialize();
+  initializeStickyNavBar();
   
 	$(window).scroll(windowScroll);
 	navLink.click(function(){ 
