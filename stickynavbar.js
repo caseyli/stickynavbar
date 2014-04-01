@@ -8,17 +8,20 @@ var highlightTolerance;
 var signedInBarHeight = 0;
 var mainContainer = 0;
 
+/* SET YOUR SETTINGS HERE */
 function initializeStickyNavBar() {
   SCROLL_TOLERANCE = 1;
   section0 = $(".hero-section");
   navigationBar = $(".navigation-bar");
   navLink = $(".nav-link");
-  mainContainer = $(".main");
+  mainContainer = $("body");
   fixedNavigationBarClass = "navigation-bar-fixed";
   highlightNavLinkClass = "nav-link-highlighted";
   hightlightTolerance = 20;
 }
 
+
+/* ALL CODE BELOW HERE SHOULD NOT NEED TO BE TOUCHED */
 $(function(){
   initializeStickyNavBar();
   
@@ -78,11 +81,6 @@ function checkForHighlightNavLink(pixelsDown) {
   if(typeof highlightElement != "undefined") {
   	highlightElement.addClass(highlightNavLinkClass);	
   }
-}
-
-function highlightNavLink(id) {
-	$(".nav-links a").removeClass("nav-selected");
-	$(id).addClass("nav-selected");
 }
 
 function navBarHeight() {
